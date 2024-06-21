@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: jd-gateway-service
+  cloud:
+    nacos:
+      server-addr: 42.193.140.71:8848
+      username: nacos
+      password: summerrice
+      #注册中心
+      discovery:
+        namespace: 96cff065-08ed-4fe3-8a89-696f7be807e6
+      #配置中心
+#      config:
+#        namespace: 96cff065-08ed-4fe3-8a89-696f7be807e6
+#        file-extension: yml
+#        #        默认命名规则是 服务名-环境.文件后缀
+#        name: jd-gateway-service-dev
+
+    gateway:
+      routes:
+        - id: jd-user-service  #nacos上面的路由名
+          uri: lb://jd-user-service  #lb代表可以实现负载均衡,需要导入负载均衡的依赖
+          predicates: #断言，判断是否符合路径
+            - Path=/my-user/**
+          filters:
+            - StripPrefix=1 # 转发路由之前先去掉第一层路径
+            - name: RequestRateLimiter
+              args:
+                #设置的数值就代表 每秒向令牌桶添加多少个令牌
+                redis-rate-limiter.replenishRate: 10
+                #令牌桶的容量，即允许在 1 秒内完成的最大请求数。设置为 0 则表示拒绝所有请求
+                redis-rate-limiter.burstCapacity: 5
+                # 一个引用名为 KeyResolver 的 bean 的 SpEL 表达式(限流维度)
+                key-resolver: "#{@keyResolver}"
+
+        - id: jd-order-service  #nacos上面的路由名
+          uri: lb://jd-order-service  #lb代表可以实现负载均衡,需要导入负载均衡的依赖
+          predicates: #断言，判断是否符合路径
+            - Path=/my-order/**
+          filters:
+            - StripPrefix=1 # 转发路由之前先去掉第一层路径
+            - name: RequestRateLimiter
+              args:
+                #设置的数值就代表 每秒向令牌桶添加多少个令牌
+                redis-rate-limiter.replenishRate: 10
+                #令牌桶的容量，即允许在 1 秒内完成的最大请求数。设置为 0 则表示拒绝所有请求
+                redis-rate-limiter.burstCapacity: 5
+                # 一个引用名为 KeyResolver 的 bean 的 SpEL 表达式(限流维度)
+                key-resolver: "#{@keyResolver}"
+    sentinel:
+      transport:
+        dashboard: 42.193.140.71:8121
+        port: 8125
+#      开启动态路由,不推荐使用
+#      discovery:
+#        locator:
+#          enabled: true
