@@ -1,13 +1,20 @@
 package com.sp;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 /**
  * Hello world!
  *
  */
-public class App 
+@SpringBootApplication
+public class GateApp
 {
     public static void main( String[] args )
     {
+
+        SpringApplication.run( GateApp.class, args );
+
         System.out.println( "Hello World!" );
     }
 }

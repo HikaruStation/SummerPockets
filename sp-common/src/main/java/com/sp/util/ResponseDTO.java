@@ -1,4 +1,4 @@
-package com.kotoha.util;
+package com.sp.util;
 
 
 public class ResponseDTO {

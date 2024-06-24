@@ -1,4 +1,4 @@
-package com.kotoha.config;
+package com.sp.config;
 
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.context.annotation.Bean;

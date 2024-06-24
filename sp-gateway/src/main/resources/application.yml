@@ -43,11 +43,6 @@ spring:
     password: 123456
 
 
-mybatis:
-  type-aliases-package: com.kotoha.pojo
-  configuration:
-    mapUnderscoreToCamelCase: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 
 
